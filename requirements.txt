@@ -75,7 +75,6 @@ jupyterlab_widgets==3.0.13
 jupytext==1.16.4
 kiwisolver==1.4.7
 loguru==0.7.2
--e git+ssh://git@github.com/jrs-at/magpylib.git@864f17b9e4d862f5e9bcd1f45802c2c945aab044#egg=magpylib
 magpylib-force==0.1.10
 magpylib-material-response==0.2.1a0
 markdown-it-py==3.0.0
