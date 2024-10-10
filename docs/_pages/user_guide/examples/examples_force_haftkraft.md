@@ -52,4 +52,4 @@ print(f"Holding Force: {round(F[2]*100)} g")
 
 Magnet dimensions and material from this example are taken from the [web](https://www.supermagnete.at/quadermagnete-neodym/quadermagnet-5mm-2.5mm-1.5mm_Q-05-2.5-1.5-HN). The remanence of N45 material lies within 1.32 and 1.36 T. The computation confirms what is stated on the web-page, that the holding force of this magnet is about 350 g.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jrs-at/magpylib/update-docs?labpath=docs%2F_static%2Fpython%2Fholding_force.ipynb)
+An interactive web app for this computation can be found [here](https://magpylib-holding-force.streamlit.app/)
