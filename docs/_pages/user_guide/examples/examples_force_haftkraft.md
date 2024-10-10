@@ -1,3 +1,17 @@
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.16.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+orphan: true
+---
+
 (examples-force-haftkraft)=
 
 # Magnetic Holding Force
@@ -18,7 +32,7 @@ For this we make use of the "magnetic mirror" effect, which is quite similar to 
 
 The following example computes the holding force of a Cuboid magnet using the magnetic mirror effect.
 
-```{code-block} python
+```{code-cell} ipython3
 import magpylib as magpy
 from magpylib_force import getFT
 
@@ -34,7 +48,8 @@ m2 = m1.copy(position=(0,0,1e-3))
 
 F,T = getFT(m2, m1)
 print(f"Holding Force: {round(F[2]*100)} g")
-# Holding Force: 349 g
 ```
 
 Magnet dimensions and material from this example are taken from the [web](https://www.supermagnete.at/quadermagnete-neodym/quadermagnet-5mm-2.5mm-1.5mm_Q-05-2.5-1.5-HN). The remanence of N45 material lies within 1.32 and 1.36 T. The computation confirms what is stated on the web-page, that the holding force of this magnet is about 350 g.
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jrs-at/magpylib/update-docs?labpath=docs%2F_static%2Fpython%2Fholding_force.ipynb)

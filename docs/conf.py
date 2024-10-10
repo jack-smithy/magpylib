@@ -50,7 +50,7 @@ def setup(app):
             "-E",  # user docstring headers
             "-M",  # Modules first
             "-o",  # Output the files to:
-            "./_autogen/",  # Output Directory
+            "./docs/_autogen/",  # Output Directory
             "./../magpylib",  # Main Module directory
         ]
     )
@@ -96,8 +96,11 @@ templates_path = ["_templates"]
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = [".rst", ".md"]
-
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".ipynb": "myst-nb",
+    ".myst": "myst-nb",
+}
 # The master toctree document.
 master_doc = "index"
 

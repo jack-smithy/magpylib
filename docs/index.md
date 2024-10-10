@@ -27,7 +27,7 @@ Magpylib is an **open-source Python package** for calculating static **magnetic 
 :::
 
 :::{grid-item-card}
-:link: https://www.sciencedirect.com/science/article/pii/S2352711020300170
+:link: <https://www.sciencedirect.com/science/article/pii/S2352711020300170>
 :link-alt: link to Journal
 :img-top: _static/images/index_icon_academic.png
 :text-align: center
@@ -42,7 +42,6 @@ Magpylib is an **open-source Python package** for calculating static **magnetic 
 
 In Magpylib, **sources** (magnets, currents, ...) and **observers** (sensors, position grids, ...) are created as Python objects with position and orientation attributes. These objects can be **grouped** and **moved** around. The system can be **viewed** graphically through various backends. The **magnetic field** is computed in the observer reference frame. Magpylib collects all inputs, and vectorizes the computation for maximal performance.
 
-
 ```{toctree}
 :maxdepth: 2
 :hidden:
@@ -51,5 +50,4 @@ _pages/user_guide/guide_index.md
 _pages/API_reference.md
 _pages/contributing/cont_index.md
 _pages/changelog_.md
-
 ```
