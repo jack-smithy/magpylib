@@ -120,7 +120,7 @@ def calculate(magnet, dim):
     )
 
     # Add colorbar with logarithmic labels
-    fig.colorbar(splt.lines, ax=ax, label="|B| (mT)")
+    fig.colorbar(splt.lines, ax=ax, label="log10(|B|) (mT)")
     # Outline magnet boundary
     x_dim, _, z_dim = dim
     ax.plot(
