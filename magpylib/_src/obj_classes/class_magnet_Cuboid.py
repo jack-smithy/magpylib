@@ -86,7 +86,7 @@ class Cuboid(BaseMagnet):
         dimension=None,
         polarization=None,
         magnetization=None,
-        susceptibility=0,
+        susceptibility=0.0,
         style=None,
         **kwargs,
     ):

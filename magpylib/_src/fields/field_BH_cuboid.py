@@ -8,11 +8,12 @@ import warnings
 
 import numpy as np
 import torch
-os.environ["CUDA_VISIBLE_DEVICES"]=""
+
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 import magpylib
 from magpylib import mu_0 as MU0
-from magpylib._src.fields.networks.networks import PINN_network
+from magpylib._src.fields.networks.networks import Network
 from magpylib._src.input_checks import check_field_input
 
 # pylint: disable=too-many-statements
@@ -239,17 +240,18 @@ def rotate(array, initial_axis, final_axis, abs):
     return array_new
 
 
-def eval_NN(B_model, dimensions, observers, susceptibilities):
-
+def eval_NN(B_model, dimensions, observers, susceptibilities) -> torch.Tensor:
     dimensions_normalized = dimensions.T / dimensions[:, 2]
     dimensions_normalized = dimensions_normalized.T
     dimensions_normalized[:, 2] = susceptibilities
     dimension_batch = torch.tensor(dimensions_normalized, dtype=torch.float32)
 
     observers_normalized = np.abs(observers) / dimensions
-    xyz_batch = torch.tensor(observers_normalized, dtype=torch.float32)
 
-    res = B_model(dimension_batch, xyz_batch)
+    xyz_batch = torch.tensor(observers_normalized, dtype=torch.float32)
+    input = torch.concatenate((dimension_batch, xyz_batch), dim=1)
+
+    res = B_model(input)
 
     return res
 
@@ -312,18 +314,14 @@ def magnet_cuboid_Bfield_NN(
         "_src",
         "fields",
         "networks",
-        "model_multiplicative_field_correction_0_SiLU_MIN-1e-5.pth",
+        "weights.pt",
     )
 
     # # networks for global fields (one network for whole space)
-    B_model = PINN_network(
-        6,
-        activation=torch.nn.SiLU(),
-        final_activation=torch.nn.SiLU(),
-        defined_with_dropout=True,
-    )  # (a,b,Chi, x,y,z) -> (B_x, B_y, B_z)
+    B_model = Network(in_features=6, hidden_dim_factor=6, out_features=3)
+    # (a,b,Chi, x,y,z) -> (B_x, B_y, B_z)
     B_model.load_state_dict(
-        torch.load(path_weights_B, map_location=torch.device("cpu"))
+        torch.load(path_weights_B, map_location=torch.device("cpu"), weights_only=True)
     )
     ####################
 
