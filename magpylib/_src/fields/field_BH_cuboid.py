@@ -241,15 +241,20 @@ def rotate(array, initial_axis, final_axis, abs):
 
 
 def eval_NN(B_model, dimensions, observers, susceptibilities) -> torch.Tensor:
+    chi_perp, _, chi_long = susceptibilities.squeeze()
+
     dimensions_normalized = dimensions.T / dimensions[:, 2]
     dimensions_normalized = dimensions_normalized.T
-    dimensions_normalized[:, 2] = susceptibilities
-    dimension_batch = torch.tensor(dimensions_normalized, dtype=torch.float32)
+    dimensions_normalized[:, 2] = chi_perp
+    dimensions_normalized = np.append(dimensions_normalized, chi_long)
+    dimension_batch = torch.tensor(
+        dimensions_normalized, dtype=torch.float32
+    ).unsqueeze(0)
 
     observers_normalized = np.abs(observers) / dimensions
-
     xyz_batch = torch.tensor(observers_normalized, dtype=torch.float32)
-    input = torch.concatenate((dimension_batch, xyz_batch), dim=1)
+
+    input = torch.concatenate((dimension_batch, xyz_batch), dim=-1)
 
     res = B_model(input)
 
@@ -314,14 +319,18 @@ def magnet_cuboid_Bfield_NN(
         "_src",
         "fields",
         "networks",
-        "weights.pt",
+        "best_weights.pt",
     )
 
     # # networks for global fields (one network for whole space)
-    B_model = Network(in_features=6, hidden_dim_factor=6, out_features=3)
+    B_model = Network(in_features=7, hidden_dim_factor=6, out_features=3)
     # (a,b,Chi, x,y,z) -> (B_x, B_y, B_z)
     B_model.load_state_dict(
-        torch.load(path_weights_B, map_location=torch.device("cpu"), weights_only=True)
+        torch.load(
+            path_weights_B,
+            map_location=torch.device("cpu"),
+            weights_only=True,
+        )
     )
     ####################
 
@@ -419,7 +428,7 @@ def BHJM_magnet_cuboid(
     BHJM *= 0  # return (0,0,0) for all special cases
 
     # use NN to compute when there is susceptibility
-    mask_sus = susceptibility != 0
+    mask_sus = np.any(susceptibility != 0)
     mask_gen_sus = mask_gen * mask_sus
     mask_gen_nosus = mask_gen * ~mask_sus
     if np.any(mask_gen_sus):

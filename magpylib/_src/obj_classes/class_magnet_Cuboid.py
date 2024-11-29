@@ -86,7 +86,7 @@ class Cuboid(BaseMagnet):
         dimension=None,
         polarization=None,
         magnetization=None,
-        susceptibility=0.0,
+        susceptibility=None,
         style=None,
         **kwargs,
     ):
@@ -103,6 +103,8 @@ class Cuboid(BaseMagnet):
     @property
     def susceptibility(self):
         """Magnet susceptibility..."""
+        if self._susceptibility is None:
+            return 0
         return self._susceptibility
 
     @susceptibility.setter
