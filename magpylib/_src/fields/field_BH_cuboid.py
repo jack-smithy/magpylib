@@ -241,15 +241,24 @@ def rotate(array, initial_axis, final_axis, abs):
 
 
 def eval_NN(B_model, dimensions, observers, susceptibilities) -> torch.Tensor:
-    chi_perp, _, chi_long = susceptibilities.squeeze()
+    chi_perp, _, chi_long = (
+        susceptibilities[0, 0],
+        susceptibilities[0, 1],
+        susceptibilities[0, 2],
+    )
 
-    dimensions_normalized = dimensions.T / dimensions[:, 2]
-    dimensions_normalized = dimensions_normalized.T
+    dimensions_normalized = (dimensions.T / dimensions[:, 2]).T
     dimensions_normalized[:, 2] = chi_perp
-    dimensions_normalized = np.append(dimensions_normalized, chi_long)
-    dimension_batch = torch.tensor(
-        dimensions_normalized, dtype=torch.float32
-    ).unsqueeze(0)
+
+    dimensions_normalized = np.concatenate(
+        (
+            dimensions_normalized,
+            chi_long * np.ones((dimensions_normalized.shape[0], 1)),
+        ),
+        axis=1,
+    )
+
+    dimension_batch = torch.tensor(dimensions_normalized, dtype=torch.float32)
 
     observers_normalized = np.abs(observers) / dimensions
     xyz_batch = torch.tensor(observers_normalized, dtype=torch.float32)
